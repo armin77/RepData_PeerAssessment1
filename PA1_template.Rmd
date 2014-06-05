@@ -33,7 +33,7 @@ axis(side=1, at=lPos,
 
 The mean for steps / day is __`r sprintf("%.2f", mean(stepsPerDay, na.rm =TRUE) )`__.
 
-The median for steps / day is __`r median(stepsPerDay, na.rm=TRUE)`__.
+The median for steps / day is __`r sprintf("%.2f", median(stepsPerDay, na.rm=TRUE) )`__.
 
 ## What is the average daily activity pattern?
 
@@ -59,6 +59,43 @@ text(y=averagePerInterval[maxAvg], x=maxAvg + 2, label=sprintf("max = %.2f steps
 
 ## Imputing missing values
 
+There are __`r sum(is.na(data$steps))`__ values missing in the original dataset.
 
+We create a new copy of that dataset and impute the missing values from the corresponding 5min interval average.
+
+```{r }
+newdata <- data
+
+for(i in seq(1, nrow(data)) ) {
+    if ( is.na(data$steps[i]) ) {
+        newdata$steps[i] <- averagePerInterval[[as.character(data$interval[i])]]
+    }
+}
+```
+
+### Resulting histogram with imputed data
+### Histogram showing the total number of steps taken each day
+```{r histogram_2,fig.width=11, fig.height=6, dependson="readData", echo=FALSE, fig.retina=2}
+newStepsPerDay <- tapply(newdata$steps, as.Date(newdata$date), sum)
+
+lPos <- barplot(newStepsPerDay,
+        xaxt="n", yaxt="n",
+        ylab="Total number of steps per day",
+        xlab="Day (September 1st to November 30th 2012)",
+        main="Histogram showing the total steps / day")
+axis(2, las=1, line=-1)
+
+axis(side=1, at=lPos,
+     labels=format(seq(min(newdata$date), max(newdata$date), by="day"), format="%d") )
+```
+
+### Simple Statistics for new dataset
+
+The new mean for steps / day is __`r sprintf("%.2f", mean(newStepsPerDay, na.rm =TRUE) )`__.
+
+The new median for steps / day is __`r sprintf("%.2f", median(newStepsPerDay, na.rm=TRUE) )`__.
+
+Both values are now identical.
+With the original dataset the median was a tiny bit lower than the mean.
 
 ## Are there differences in activity patterns between weekdays and weekends?
