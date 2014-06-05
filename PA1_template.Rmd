@@ -1,17 +1,61 @@
 # Reproducible Research: Peer Assessment 1
 
+Setting locale to en_US.
+```{r echo=FALSE, results="hide"}
+Sys.setlocale("LC_ALL", "en_US")
+```
 
 ## Loading and preprocessing the data
 
-
+```{r}
+data <- read.csv("activity.csv")
+data$date <- strptime(data$date, format="%Y-%m-%d")
+```
 
 ## What is mean total number of steps taken per day?
 
+### Histogram showing the total number of steps taken each day
+```{r histogram,fig.width=11, fig.height=6, dependson="readData", echo=FALSE, fig.retina=2}
+stepsPerDay <- tapply(data$steps, as.Date(data$date), sum)
 
+lPos <- barplot(stepsPerDay,
+        xaxt="n", yaxt="n",
+        ylab="Total number of steps per day",
+        xlab="Day (September 1st to November 30th 2012)",
+        main="Histogram showing the total steps / day")
+axis(2, las=1, line=-1)
+
+axis(side=1, at=lPos,
+     labels=format(seq(min(data$date), max(data$date), by="day"), format="%d") )
+```
+
+### Simple Statistics 
+
+The mean for steps / day is __`r sprintf("%.2f", mean(stepsPerDay, na.rm =TRUE) )`__.
+
+The median for steps / day is __`r median(stepsPerDay, na.rm=TRUE)`__.
 
 ## What is the average daily activity pattern?
 
+```{r timeseries,fig.width=11, fig.height=6, dependson="readData", echo=FALSE, fig.retina=2}
+averagePerInterval <- tapply(data$steps, data$interval, mean, na.rm=TRUE)
 
+plot(averagePerInterval,
+        type="l", frame.plot=F,
+        xaxt="n", yaxt="n",
+        ylab="Average number of steps per 5min interval",
+        xlab="Time of day",
+        main="Showing the average steps / 5min interval")
+axis(2, las=1, line=-1)
+
+axis(side=1, at=seq(1, 300, by=24),
+     labels=paste0(seq(0, 24, by=2), "h"), cex=0.8)
+
+maxAvg <- which.max(averagePerInterval)
+abline(v=maxAvg, col="red", lty=2)
+text(y=0, x=maxAvg + 2, label=paste("max @", names(averagePerInterval[maxAvg])), adj=0, col="red", cex=.8)
+text(y=averagePerInterval[maxAvg], x=maxAvg + 2, label=sprintf("max = %.2f steps/5min", averagePerInterval[maxAvg]), adj=0, col="red", cex=.8)
+```
 
 ## Imputing missing values
 
