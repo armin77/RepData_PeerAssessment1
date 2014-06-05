@@ -1,3 +1,7 @@
+# prevent the Dataset to be indexed
 activity.csv
+
+# RStudio specific files
 .Rproj.user
 RepData_PeerAssessment1.Rproj
+.Rhistory
