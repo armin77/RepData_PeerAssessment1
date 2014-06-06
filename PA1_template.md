@@ -57,3 +57,17 @@ Both values are now identical.
 With the original dataset the median was a tiny bit lower than the mean.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+
+
+As shown in the graphs below there is quite a difference between weekends (A) and weekdays (B) in total average steps / 5min interval.
+On a weekend the maximum average of __175.00__ is at about __915__h (green). But on a weekday the maximum average of __234.10__ is at about __835__h (orange). Thats about __40__min earlier.
+
+The blue lines (a,b,c) in both activity diagrams show times which are quite different between weekends and weekdays.
+* a) On weekdays there is a lot more activity between about 6h and 8h present than on a weekend. This is likely to be caused of people getting up early for work.
+* b) On weekends there's a lot more activity from noon into the afternoon. This could likely be caused by shopping activities.
+* c) On weekends there's also clearly more activity in the early evening. This is likely from social activities.
+
+The activity patterns between weekday and weekend are clearly different!
+
+<img src="figure/weekday_vs_weekend.png" title="plot of chunk weekday_vs_weekend" alt="plot of chunk weekday_vs_weekend" width="792" />
